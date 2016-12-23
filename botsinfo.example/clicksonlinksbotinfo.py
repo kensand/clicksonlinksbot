@@ -1,0 +1,5 @@
+client_id="client-id"
+client_secret="client-secret"
+password="password"
+username="username"
+user_agent="ClicksOnLinksBot 0.1"
