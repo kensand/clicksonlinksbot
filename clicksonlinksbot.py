@@ -52,7 +52,7 @@ for comment in comments:
                     parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
                 except Exception as e : 
                     response += str(num) + '.) ' + text + ': ' + url + '\n\n'
-                    response += 'Error parsing link, sorry :('
+                    response += 'Error parsing link, sorry :(\n'
                     #debug exception option
                     response += '\n\n For debugging, exception: ' + str(e)
                 else:
