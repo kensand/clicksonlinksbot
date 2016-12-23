@@ -50,9 +50,11 @@ for comment in comments:
                 url = sp[1][:len(sp[1]) - 1]
                 try:
                     parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
-                except Exception: 
+                except Exception as e : 
                     response += str(num) + '.) ' + text + ': ' + url + '\n\n'
-                    response += 'Error parsing link, sorry :(\n'
+                    response += 'Error parsing link, sorry :('
+                    #debug exception option
+                    response += '\n\n For debugging, exception: ' + str(e)
                 else:
                     stemmer = Stemmer(LANGUAGE)
                     summarizer = Summarizer(stemmer)
@@ -71,8 +73,8 @@ for comment in comments:
             print('comment reply:\n%s' % response)
             try:
                 comment.reply(response)
-            except Exception:
-                print('Error posting comment')
+            except Exception as e:
+                print('Error posting comment: ' + str(e))
 
 
 '''
