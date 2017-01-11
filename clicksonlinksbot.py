@@ -206,11 +206,11 @@ for comment in comments:
                         response += '\n'
                         response += '\n\n----------------------\n\n'
                         num += 1
-                        '''
+                       
                         elif l.endswith(".gif") or l.endswith(".jpg") or l.endswith(".png"):
                         urllib.urlretrieve(l, 'tempimage' + l[-4:])
                         mldb.query("SELECT inception({url: '%s'}) as *" % l)
-                        '''    
+                           
             print('comment reply:\n%s' % response)
             try:
                 comment.reply(response)
