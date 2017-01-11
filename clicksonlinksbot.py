@@ -4,10 +4,15 @@ import sumy
 import urllib
 from sumy.parsers.html import HtmlParser
 from sumy.nlp.tokenizers import Tokenizer
+<<<<<<< HEAD
+=======
+#from sumy.summarizers.lsa import LsaSummarizer as Summarizer
+>>>>>>> 6f2d74b40134268307e3f9152f6c91e6d724926b
 from sumy.summarizers.edmundson import EdmundsonSummarizer as Summarizer
 from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
 from sumy.utils import ItemsCount
+<<<<<<< HEAD
 #from pymldb import Connection
 #mldb = Connection()
 inceptionUrl = 'http://public.mldb.ai/models/inception_dec_2015.zip'
@@ -16,6 +21,9 @@ print mldb.put('v1/functions/fetch', {
     "type": 'fetcher',
     "params": {}
 })
+=======
+from random import randint
+>>>>>>> 6f2d74b40134268307e3f9152f6c91e6d724926b
 
 
 print mldb.put('/v1/functions/inception', {
@@ -38,10 +46,107 @@ r = praw.Reddit(
     user_agent="ClicksOnLinksBot 0.1"
 )
 
+Personality = ["Just because I do something doesn't mean that something has to make sense",
+               "I'm just weird okay?",
+               "Don't ask what this bot can do for you, ask what you can do for this bot!"]
+Disclaimer = "I am a bot. I just do what I am told.\n My full source code can be found on [GitHub](https://github.com/kensand/clicksonlinksbot)"
+
+
+LANGUAGE ="english" 
+count = 1
+while count:
+    #print count
+    #if count == 999999:
+    #    count = 0
+    #count += 1
+    for comment in r.inbox.unread():
+        if type(comment) is praw.models.Comment:
+            body = comment.body
+            body.encode('UTF-8')
+            r.inbox.mark_read([comment])
+            #count += 1
+            
+            #if nameRegex.search(body) is not None:
+            if not comment.is_root:# and 
+                print("found non-root comment with our name in it")
+                print u'comment author = ' + comment.author.name
+                
+                print u'parent author = ' + r.comment(comment.parent_id[3:]).author.name
+                if not r.comment(comment.parent_id[3:]).author.name == u'clicksonlinksbot':
+                    print 'got here'
+                    print comment.body
+                    parent = r.comment(comment.parent_id[3:])
+                    print parent.body
+                    links = re.findall(ur'\[\S*\]\(\S*\)',parent.body)
+                    response = ''
+                    num = 1
+                    for l in links:                               
+                        print("link: %s" % l)
+                        sp = l.split("](")
+                        text = sp[0][1:]
+                        url = sp[1][:len(sp[1]) - 1]
+                        try:
+                            parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
+                        except Exception as e :  
+                            response += str(num) + '.) ' + text + ': ' + url + '\n\n'
+                            response += 'Error parsing link, sorry :(\n'
+                            #debug exception option
+                            response += '\n\n For debugging, exception: ' + str(e)
+                        else:
+                            stemmer = Stemmer(LANGUAGE)
+                            summarizer = Summarizer(stemmer)
+                            summarizer.stop_words = get_stop_words(LANGUAGE)
+                            summarizer.bonus_words = ("cool", "heading", "sentence", "words", "like", "because")
+                            summarizer.stigma_words = ("this", "is", "I", "am", "and")
+                            summarizer.null_words = ("word", "another", "and", "some", "next")
+                            SENTENCES_COUNT = ItemsCount("3%")
+                            
+                            
+                            response += str(num) + '.) ' + text + ': ' + url + '\n\n'
+                            print(response)
+                            for sentence in summarizer(parser.document, SENTENCES_COUNT):
+                                print(sentence._text)
+                                response+='\n'
+                                
+                                response+=sentence._text
+                                response += '\n'
+                                response += '\n\n----------------------\n\n'
+                                num += 1
+                                print('comment reply:\n%s' % response)
+                
+        
+                
+                    try:
+                        if response != '':
+                            response += Disclaimer + '\n\n' + Personality[randint(0,len(Personality) - 1)] + '\n' 
+                            comment.reply(response)
+                        else:
+                            print ("no response")
+                            
+                    except Exception as e:
+                        print('Error posting comment: ' + str(e))
+                else:
+                    print 'not gonna respond to myself'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #r = praw.Reddit('clicksonlinksbot', user_agent='clicksonlinksbot user agent')
 
 #print(praw.helpers)
-
+'''
 word = ur'/?u/clicksonlinksbot'
 sub = r.subreddit('all')
 comments = sub.stream.comments()
@@ -110,7 +215,7 @@ for comment in comments:
             except Exception as e:
                 print('Error posting comment: ' + str(e))
 
-
+'''
 '''
 else:
 print("not found: %s" % str(count))
