@@ -4,26 +4,11 @@ import sumy
 import urllib
 from sumy.parsers.html import HtmlParser
 from sumy.nlp.tokenizers import Tokenizer
-<<<<<<< HEAD
-=======
-#from sumy.summarizers.lsa import LsaSummarizer as Summarizer
->>>>>>> 6f2d74b40134268307e3f9152f6c91e6d724926b
 from sumy.summarizers.edmundson import EdmundsonSummarizer as Summarizer
 from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
 from sumy.utils import ItemsCount
-<<<<<<< HEAD
-#from pymldb import Connection
-#mldb = Connection()
-inceptionUrl = 'http://public.mldb.ai/models/inception_dec_2015.zip'
-'''
-print mldb.put('v1/functions/fetch', {
-    "type": 'fetcher',
-    "params": {}
-})
-=======
-from random import randint
->>>>>>> 6f2d74b40134268307e3f9152f6c91e6d724926b
+
 
 
 print mldb.put('/v1/functions/inception', {
