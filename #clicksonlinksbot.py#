@@ -38,6 +38,8 @@ r = praw.Reddit(
     user_agent="ClicksOnLinksBot 0.1"
 )
 
+mentions = r.get(https://www.reddit.com/message/mentions.json)
+
 #r = praw.Reddit('clicksonlinksbot', user_agent='clicksonlinksbot user agent')
 
 #print(praw.helpers)
@@ -63,7 +65,7 @@ for comment in comments:
         if not comment.is_root:
             print("found comment with our name in it")
             parent = r.comment(comment.parent_id[3:])
-            links = re.findall(ur'\[\S*\]\(\S*\)',parent.body)
+            links = re.findall(ur'\[.*\]\(.*\)',parent.body)
             print 'Links length = ' + str(len(links))
             print links
             response = ''
