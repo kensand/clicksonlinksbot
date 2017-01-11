@@ -8,6 +8,7 @@ from sumy.summarizers.edmundson import EdmundsonSummarizer as Summarizer
 from sumy.nlp.stemmers import Stemmer
 from sumy.utils import get_stop_words
 from sumy.utils import ItemsCount
+from random import randint
 
 
 '''
