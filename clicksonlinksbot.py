@@ -106,6 +106,7 @@ while count:
                         if response == '':
                             print ("no response")
                             response = 'You rang, but I didn\'t have an answer for you (probably not enough text on the page).'
+                            response += '\n\n----------------------\n\n'
                             
                         
                         response += Disclaimer + '\n\n' + Personality[randint(0,len(Personality) - 1)] + '\n' 
