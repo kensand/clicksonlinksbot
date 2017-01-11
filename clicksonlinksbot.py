@@ -93,11 +93,13 @@ while count:
         
                 
                     try:
-                        if response != '':
-                            response += Disclaimer + '\n\n' + Personality[randint(0,len(Personality) - 1)] + '\n' 
-                            comment.reply(response)
-                        else:
+                        if response == '':
                             print ("no response")
+                            response = 'You rang, but I didn\'t have an answer for you (probably not enough text on the page).'
+                            
+                        
+                        response += Disclaimer + '\n\n' + Personality[randint(0,len(Personality) - 1)] + '\n' 
+                        comment.reply(response)
                             
                     except Exception as e:
                         print('Error posting comment: ' + str(e))
