@@ -10,7 +10,7 @@ from sumy.utils import get_stop_words
 from sumy.utils import ItemsCount
 
 
-
+'''
 print mldb.put('/v1/functions/inception', {
     "type": 'tensorflow.graph',
     "params": {
