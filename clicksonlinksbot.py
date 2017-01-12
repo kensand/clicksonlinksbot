@@ -49,7 +49,7 @@ while count:
         if type(comment) is praw.models.Comment:
             body = comment.body
             body.encode('UTF-8')
-            r.inbox.mark_read([comment])
+            
             #count += 1
             
             #if nameRegex.search(body) is not None:
@@ -63,14 +63,40 @@ while count:
                     print comment.body
                     parent = r.comment(comment.parent_id[3:])
                     print parent.body
-                    links = re.findall(ur'\[\S*\]\(\S*\)',parent.body)
                     response = ''
                     num = 1
+                    urls = []
+                    texts = {}
+
+                    
+                    links = re.findall(ur'\[[^\]]*\]\([^\)]*\)',parent.body)
+                    
                     for l in links:                               
                         print("link: %s" % l)
                         sp = l.split("](")
                         text = sp[0][1:]
                         url = sp[1][:len(sp[1]) - 1]
+                        if url not in urls:
+                            urls.append(url)
+                            texts[url] = text
+
+
+                    links = re.findall(ur'[^\(]https?://\S*[^\)]',parent.body)
+                    
+                    for l in links:                               
+                        print("link: %s" % l)
+                        if l not in urls:
+                            urls.append(l)
+
+
+                    
+                    
+
+
+                    for url in urls:
+                        text = ''
+                        if url in texts:
+                            text = texts[url]              
                         try:
                             parser = HtmlParser.from_url(url, Tokenizer(LANGUAGE))
                         except Exception as e :  
@@ -86,12 +112,12 @@ while count:
                             summarizer.stigma_words = ("this", "is", "I", "am", "and")
                             summarizer.null_words = ("word", "another", "and", "some", "next")
                             SENTENCES_COUNT = ItemsCount("3%")
-                            
-                            
+                                
+                                
                             response += str(num) + '.) ' + text + ': ' + url + '\n\n'
-                            print(response)
+                            #print(response)
                             for sentence in summarizer(parser.document, SENTENCES_COUNT):
-                                print(sentence._text)
+                                #print(sentence._text)
                                 response+='\n'
                                 
                                 response+=sentence._text
@@ -114,6 +140,9 @@ while count:
                             
                     except Exception as e:
                         print('Error posting comment: ' + str(e))
+                    else:
+                        r.inbox.mark_read([comment])
+                        print response
                 else:
                     print 'not gonna respond to myself'
 
